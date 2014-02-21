@@ -2,7 +2,8 @@ var $ = require('jquery'),
     Backbone = require('backbone'),
     _ = require('underscore'),
     Calendar = require('./calendar'),
-    Agenda = require('./agenda');
+    Agenda = require('./agenda'),
+    AgendaDay = require('./agenda_day');
 
 Backbone.$ = $;
 

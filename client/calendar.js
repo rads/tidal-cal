@@ -48,7 +48,7 @@ var Calendar = Backbone.View.extend({
   },
 
   _selectDay: function(date) {
-    this.$('.calendar-day-' + date.getDay()).addClass('selected');
+    this.$('.calendar-day-' + date.getDate()).addClass('selected');
   }
 });
 
