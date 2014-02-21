@@ -87,6 +87,6 @@ body {
   border-top: 1px solid #ccc;
 }
 
-.last-week {
-  border-bottom: 0;
+.selected {
+  background-color: aqua;
 }
