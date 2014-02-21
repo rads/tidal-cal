@@ -15,17 +15,28 @@
       </ul>
     </div>
     <div class="calendar group">
-      <div class="calendar-day">February 1</div>
-      <div class="calendar-day">February 2</div>
-      <div class="calendar-day">February 3</div>
-      <div class="calendar-day">February 4</div>
-      <div class="calendar-day">February 5</div>
-      <div class="calendar-day">February 6</div>
-      <div class="calendar-day end-of-week">February 7</div>
-      <div class="calendar-day">February 8</div>
     </div>
   </div>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/template" id="calendar-day-template">
+    <%
+      var classes = [];
+      var dayOfMonth;
+
+      if (typeof dayOfMonth === 'undefined') {
+        classes.push('calendar-spacer');
+        dayOfMonth = '';
+      }
+
+      if (typeof dayOfWeek !== 'undefined') {
+        classes.push('calendar-day-'+dayOfWeek.toLowerCase());
+      }
+
+      if (gridNumber < 7) classes.push('calendar-day-first-week');
+    %>
+    <div class="calendar-day <%= classes.join(' ') %>">
+      <%= dayOfMonth %>
+    </div>
+  </script>
   <script src="index.js"></script>
 </body>
 </html>
