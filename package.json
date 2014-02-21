@@ -4,5 +4,9 @@
   "version": "0.0.1",
   "devDependencies": {
     "browserify": "~3.30.2"
+  },
+  "dependencies": {
+    "underscore": "~1.6.0",
+    "backbone": "~1.1.2"
   }
 }
