@@ -25,27 +25,23 @@
       <%= body %> <a href="#" class="agenda-item-remove">Remove</a>
     </li>
   </script>
+  <script type="text/template" id="calendar-day-spacer">
+    <%
+      var classes = ['calendar-spacer'];
+      if (isFirstWeek) classes.push('calendar-day-first-week');
+    %>
+    <div class="<%= classes.join(' ') %>"></div>
+  </script>
   <script type="text/template" id="calendar-day-template">
     <%
-      var classes = [];
-      var content, dayOfMonth;
-
-      if (typeof dayOfMonth === 'undefined') {
-        classes.push('calendar-spacer');
-        dayOfMonth = '';
-        content = '';
-      } else {
-        content = dayOfMonth + ' - ' + itemCount;
-      }
-
-      if (typeof dayOfWeek !== 'undefined') {
-        classes.push('calendar-day-'+dayOfWeek.toLowerCase());
-      }
-
-      if (gridNumber < 7) classes.push('calendar-day-first-week');
+      var classes = ['calendar-day', 'calendar-day-'+dayOfWeek.toLowerCase()];
+      if (isFirstWeek) classes.push('calendar-day-first-week');
     %>
-    <div class="calendar-day <%= classes.join(' ') %>" data-day-of-month="<%= dayOfMonth %>">
-      <%= content %>
+    <div class="<%= classes.join(' ') %>" data-day-of-month="<%= dayOfMonth %>">
+      <div class="calendar-day-number"><%= dayOfMonth %></div>
+      <div class="calendar-day-item-count">
+        <% for (var i = 0; i < itemCount; i++) { %>●<% } %>
+      </div>
     </div>
   </script>
   <script src="index.js"></script>

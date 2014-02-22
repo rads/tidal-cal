@@ -61,7 +61,9 @@ body {
   height: 100%;
 }
 
-.calendar-day {
+.calendar-day,
+.calendar-spacer
+{
   float: left;
   width: 14.285714286%;
   height: 16.66666667%;
@@ -70,15 +72,16 @@ body {
   padding: .5em;
 }
 
-.calendar-day:hover {
-  background-color: #f5f5f5;
-}
-
 .calendar-spacer {
   background-color: #f5f5f5;
 }
 
+.calendar-day:hover {
+  background-color: #f5f5f5;
+}
+
 .calendar-day:first-child,
+.calendar-spacer:first-child,
 .calendar-day-sunday {
   border-left: 1px solid #ccc;
 }
@@ -87,7 +90,13 @@ body {
   border-top: 1px solid #ccc;
 }
 
-.selected {
+.calendar-day-item-count {
+  color: blue;
+  font-size: 1.5em;
+}
+
+.selected,
+.selected:hover {
   background-color: aqua;
 }
 

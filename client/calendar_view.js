@@ -6,7 +6,8 @@ var DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
     'Friday', 'Saturday'];
 
 var CalendarView = Backbone.View.extend({
-  template: _.template($('#calendar-day-template').html()),
+  dayTemplate: _.template($('#calendar-day-template').html()),
+  spacerTemplate: _.template($('#calendar-day-spacer').html()),
 
   events: {
     'click .calendar-day': '_clickDay'
@@ -14,18 +15,20 @@ var CalendarView = Backbone.View.extend({
 
   initialize: function(options) {
     this._month = options.month;
-
-    this.$el.empty();
     this._addAllDays();
+    this._setStartDay(options.day);
+  },
 
-    var startDay = options.day.getDayOfMonth();
-    var dayEl = this.$('[data-day-of-month=' + startDay + ']');
+  _setStartDay: function(day) {
+    var dayEl = this.$('[data-day-of-month=' + day.getDayOfMonth() + ']');
     this._setSelectedDay(dayEl);
   },
 
   _addAllDays: function() {
     var self = this;
     var days = this._month.getDayCount();
+
+    this.$el.empty();
 
     var startSpacers = this._month.getDay(1).getDayOfWeek();
     _.times(startSpacers, function(i) {
@@ -43,15 +46,15 @@ var CalendarView = Backbone.View.extend({
   },
 
   _addSpacer: function(gridNumber) {
-    this.$el.append(this.template({gridNumber: gridNumber}));
+    this.$el.append(this.spacerTemplate({isFirstWeek: (gridNumber < 7)}));
   },
 
   _addDay: function(gridNumber, day) {
     var self = this;
 
     function dayTpl() {
-      return $(self.template({
-        gridNumber: gridNumber,
+      return $(self.dayTemplate({
+        isFirstWeek: (gridNumber < 7),
         dayOfMonth: day.getDayOfMonth(),
         dayOfWeek: DAY_NAMES[day.getDayOfWeek()],
         itemCount: day.getItems().length
