@@ -2,6 +2,9 @@
   "name": "tidal-calendar",
   "private": true,
   "version": "0.0.1",
+  "scripts": {
+    "start": "make && node server"
+  },
   "devDependencies": {
     "browserify": "~3.30.2"
   },
