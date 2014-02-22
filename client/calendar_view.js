@@ -85,8 +85,6 @@ var CalendarView = Backbone.View.extend({
     event.preventDefault();
 
     var $target = $(event.currentTarget);
-    if ($target.hasClass('calendar-spacer')) return;
-
     this._setSelectedDay($target);
 
     var day = this._month.getDay($target.data('day-of-month'));
