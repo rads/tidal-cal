@@ -5,7 +5,7 @@ var $ = require('jquery'),
 var DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
     'Friday', 'Saturday'];
 
-var Calendar = Backbone.View.extend({
+var CalendarView = Backbone.View.extend({
   template: _.template($('#calendar-day-template').html()),
 
   events: {
@@ -91,4 +91,4 @@ var Calendar = Backbone.View.extend({
   }
 });
 
-module.exports = Calendar;
+module.exports = CalendarView;

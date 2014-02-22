@@ -3,6 +3,9 @@ var $ = require('jquery'),
     _ = require('underscore'),
     AgendaDay = require('./agenda_day');
 
+var MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+
 var AgendaView = Backbone.View.extend({
   template: _.template($('#agenda-item-template').html()),
 
@@ -12,17 +15,22 @@ var AgendaView = Backbone.View.extend({
   },
 
   initialize: function(options) {
-    this._day = options.day;
     this.$items = this.$('.agenda-items');
     this.$form = this.$('.agenda-form');
     this.$input = this.$('.agenda-form-input');
-    this.setDay(this._day);
+    this.$header = this.$('.agenda-header');
+    this.setDay(options.day);
+    this._updateHeader();
+  },
+
+  _updateHeader: function() {
+    this.$header.text(MONTH_NAMES[this._day.getMonth()] + ' ' + this._day.getFullYear());
   },
 
   setDay: function(day) {
     var self = this;
 
-    if (this._onAdd || this._onRemove) {
+    if (this._day) {
       this._day.off('add', this._onAdd);
       this._day.off('remove', this._onRemove);
     }

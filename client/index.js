@@ -1,7 +1,7 @@
 var $ = require('jquery'),
     Backbone = require('backbone'),
     _ = require('underscore'),
-    Calendar = require('./calendar'),
+    CalendarView = require('./calendar_view'),
     AgendaView = require('./agenda_view'),
     AgendaMonth = require('./agenda_month');
 
@@ -16,7 +16,7 @@ var App = Backbone.View.extend({
     month.on('sync', function() {
       var day = month.getDay(now.getDate());
 
-      self._calendar = new Calendar({
+      self._calendar = new CalendarView({
         el: self.$('.calendar'),
         month: month,
         day: day
