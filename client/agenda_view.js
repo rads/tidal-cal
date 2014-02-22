@@ -11,7 +11,9 @@ var AgendaView = Backbone.View.extend({
 
   events: {
     'submit .agenda-form': '_addItemFromForm',
-    'click .agenda-item-remove': '_removeItemFromButton'
+    'click .agenda-item-remove': '_removeItemFromButton',
+    'click .agenda-next': '_bubbleNext',
+    'click .agenda-prev': '_bubblePrev'
   },
 
   initialize: function(options) {
@@ -30,23 +32,17 @@ var AgendaView = Backbone.View.extend({
   setDay: function(day) {
     var self = this;
 
-    if (this._day) {
-      this._day.off('add', this._onAdd);
-      this._day.off('remove', this._onRemove);
-    }
+    if (this._day) this.stopListening(this._day);
 
     this._day = day;
 
-    this._onAdd = function(item) {
+    this.listenTo(day, 'add', function(item) {
       self._addItem(item);
-    };
+    });
 
-    this._onRemove = function(item) {
+    this.listenTo(day, 'remove', function(item) {
       self._removeItem(item);
-    };
-
-    day.on('add', this._onAdd);
-    day.on('remove', this._onRemove);
+    });
 
     this.$items.empty();
 
@@ -73,6 +69,16 @@ var AgendaView = Backbone.View.extend({
     event.preventDefault();
     this._day.addItem({body: this.$input.val()});
     this.$form[0].reset();
+  },
+
+  _bubbleNext: function(event) {
+    event.preventDefault();
+    this.trigger('nextMonth');
+  },
+
+  _bubblePrev: function(event) {
+    event.preventDefault();
+    this.trigger('prevMonth');
   }
 });
 

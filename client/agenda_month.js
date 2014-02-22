@@ -43,6 +43,38 @@ _.extend(AgendaMonth.prototype, {
     return newDay;
   },
 
+  nextMonth: function() {
+    var year, month;
+
+    if (this._date.getMonth() === 11) {
+      year = this._date.getFullYear() + 1;
+      month = 0;
+    } else {
+      year = this._date.getFullYear();
+      month = this._date.getMonth() + 1;
+    }
+
+    return new AgendaMonth({date: new Date(year, month, 1)});
+  },
+
+  prevMonth: function() {
+    var year, month;
+
+    if (this._date.getMonth() === 0) {
+      year = this._date.getFullYear() - 1;
+      month = 11;
+    } else {
+      year = this._date.getFullYear();
+      month = this._date.getMonth() - 1;
+    }
+
+    return new AgendaMonth({date: new Date(year, month, 1)});
+  },
+
+  isCurrentMonth: function() {
+    return (this._date.getMonth() === new Date().getMonth());
+  },
+
   getDayCount: function() {
     return new Date(this._date.getFullYear(), (this._date.getMonth() + 1), 0).getDate();
   }

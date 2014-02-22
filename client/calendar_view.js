@@ -15,6 +15,7 @@ var CalendarView = Backbone.View.extend({
   initialize: function(options) {
     this._month = options.month;
 
+    this.$el.empty();
     this._addAllDays();
 
     var startDay = options.day.getDayOfMonth();
@@ -26,7 +27,7 @@ var CalendarView = Backbone.View.extend({
     var self = this;
     var days = this._month.getDayCount();
 
-    var startSpacers = this._month.getDay(0).getDayOfWeek() + 1;
+    var startSpacers = this._month.getDay(1).getDayOfWeek();
     _.times(startSpacers, function(i) {
       self._addDay(i);
     });
@@ -60,7 +61,7 @@ var CalendarView = Backbone.View.extend({
 
     var $el = dayTpl();
 
-    day.on('add remove', function() {
+    this.listenTo(day, 'add remove', function() {
       var wasSelected = $el.hasClass('selected');
 
       var newEl = dayTpl();
