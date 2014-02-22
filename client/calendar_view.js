@@ -29,7 +29,7 @@ var CalendarView = Backbone.View.extend({
 
     var startSpacers = this._month.getDay(1).getDayOfWeek();
     _.times(startSpacers, function(i) {
-      self._addDay(i);
+      self._addSpacer(i);
     });
 
     _.times(days, function(i) {
@@ -38,25 +38,24 @@ var CalendarView = Backbone.View.extend({
 
     var endSpacers = (7 - ((startSpacers + days) % 7));
     _.times(endSpacers, function(i) {
-      self._addDay(startSpacers + days + i);
+      self._addSpacer(startSpacers + days + i);
     });
+  },
+
+  _addSpacer: function(gridNumber) {
+    this.$el.append(this.template({gridNumber: gridNumber}));
   },
 
   _addDay: function(gridNumber, day) {
     var self = this;
-    var data = {gridNumber: gridNumber};
-
-    if (!day) {
-      this.$el.append(this.template(data));
-      return;
-    }
 
     function dayTpl() {
-      return $(self.template(_.extend({}, data, {
+      return $(self.template({
+        gridNumber: gridNumber,
         dayOfMonth: day.getDayOfMonth(),
         dayOfWeek: DAY_NAMES[day.getDayOfWeek()],
         itemCount: day.getItems().length
-      })));
+      }));
     }
 
     var $el = dayTpl();

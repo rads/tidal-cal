@@ -30,25 +30,14 @@ var AgendaView = Backbone.View.extend({
   },
 
   setDay: function(day) {
-    var self = this;
-
     if (this._day) this.stopListening(this._day);
 
     this._day = day;
-
-    this.listenTo(day, 'add', function(item) {
-      self._addItem(item);
-    });
-
-    this.listenTo(day, 'remove', function(item) {
-      self._removeItem(item);
-    });
+    this.listenTo(day, 'add', _.bind(this._addItem, this));
+    this.listenTo(day, 'remove', _.bind(this._removeItem, this));
 
     this.$items.empty();
-
-    _.each(day.getItems(), function(item) {
-      self._addItem(item);
-    });
+    _.each(day.getItems(), _.bind(this._addItem, this));
   },
 
   _addItem: function(item) {
