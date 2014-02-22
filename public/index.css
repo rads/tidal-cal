@@ -93,6 +93,7 @@ body {
 .calendar-day-item-count {
   color: blue;
   font-size: 1.5em;
+  word-wrap: break-word;
 }
 
 .selected,
