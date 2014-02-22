@@ -14,11 +14,11 @@ var Calendar = Backbone.View.extend({
 
   initialize: function(options) {
     this._month = options.month;
-    this._day = options.day;
 
     this._addAllDays();
 
-    var dayEl = this.$('[data-day-of-month=' + this._day.getDayOfMonth() + ']');
+    var startDay = options.day.getDayOfMonth();
+    var dayEl = this.$('[data-day-of-month=' + startDay + ']');
     this._setSelectedDay(dayEl);
   },
 
@@ -42,17 +42,35 @@ var Calendar = Backbone.View.extend({
   },
 
   _addDay: function(gridNumber, day) {
+    var self = this;
     var data = {gridNumber: gridNumber};
 
-    if (day) {
-      _.extend(data, {
-        dayOfMonth: day.getDayOfMonth(),
-        dayOfWeek: DAY_NAMES[day.getDayOfWeek()],
-        itemCount: day.get('items').length
-      });
+    if (!day) {
+      this.$el.append(this.template(data));
+      return;
     }
 
-    this.$el.append(this.template(data));
+    function dayTpl() {
+      return $(self.template(_.extend({}, data, {
+        dayOfMonth: day.getDayOfMonth(),
+        dayOfWeek: DAY_NAMES[day.getDayOfWeek()],
+        itemCount: day.getItems().length
+      })));
+    }
+
+    var $el = dayTpl();
+
+    day.on('add remove', function() {
+      var wasSelected = $el.hasClass('selected');
+
+      var newEl = dayTpl();
+      $el.replaceWith(newEl);
+      $el = newEl;
+
+      if (wasSelected) newEl.addClass('selected');
+    });
+
+    this.$el.append($el);
   },
 
   _setSelectedDay: function(dayEl) {
@@ -64,6 +82,8 @@ var Calendar = Backbone.View.extend({
     event.preventDefault();
 
     var $target = $(event.currentTarget);
+    if ($target.hasClass('calendar-spacer')) return;
+
     this._setSelectedDay($target);
 
     var day = this._month.getDay($target.data('day-of-month'));

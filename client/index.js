@@ -2,7 +2,7 @@ var $ = require('jquery'),
     Backbone = require('backbone'),
     _ = require('underscore'),
     Calendar = require('./calendar'),
-    Agenda = require('./agenda'),
+    AgendaView = require('./agenda_view'),
     AgendaMonth = require('./agenda_month');
 
 Backbone.$ = $;
@@ -26,12 +26,11 @@ var App = Backbone.View.extend({
         self._agenda.setDay(day);
       });
 
-      self._agenda = new Agenda({
+      self._agenda = new AgendaView({
         el: self.$('.agenda'),
         day: day
       });
     });
-
 
     month.fetch();
   }

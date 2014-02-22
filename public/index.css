@@ -90,3 +90,11 @@ body {
 .selected {
   background-color: aqua;
 }
+
+.agenda-item-remove {
+  display: none;
+}
+
+.agenda-item:hover .agenda-item-remove {
+  display: inline;
+}

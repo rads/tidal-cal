@@ -6,37 +6,45 @@ var _ = require('underscore'),
 function AgendaMonth(options) {
   _.extend(this, Backbone.Events);
 
-  this.date = options.date;
+  this._date = options.date;
+  this._data = null;
+  this._days = {};
 }
 
 _.extend(AgendaMonth.prototype, {
   url: function() {
-    return '/agenda/' + this.date.getFullYear() + '-' +
-      (this.date.getMonth() + 1);
+    return '/agenda/' + this._date.getFullYear() + '-' +
+      (this._date.getMonth() + 1);
   },
 
   fetch: function() {
     var self = this;
 
     $.get(this.url(), function(resp) {
-      self.data = resp;
+      self._data = resp;
       self.trigger('sync');
     });
   },
 
   getDay: function(dayOfMonth) {
-    var newDate = new Date(this.date.getFullYear(),
-      this.date.getMonth(), dayOfMonth);
-    var dayData = this.data[dayOfMonth];
+    if (this._days[dayOfMonth]) return this._days[dayOfMonth];
 
-    return new AgendaDay({
+    var newDate = new Date(this._date.getFullYear(),
+      this._date.getMonth(), dayOfMonth);
+    var dayData = this._data[dayOfMonth];
+
+    var newDay = new AgendaDay({
       date: newDate,
       items: (dayData && dayData.items) || []
     });
+
+    this._days[dayOfMonth] = newDay;
+
+    return newDay;
   },
 
   getDayCount: function() {
-    return new Date(this.date.getFullYear(), (this.date.getMonth() + 1), 0).getDate();
+    return new Date(this._date.getFullYear(), (this._date.getMonth() + 1), 0).getDate();
   }
 });
 
