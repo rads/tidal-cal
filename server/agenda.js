@@ -53,7 +53,6 @@ _.extend(Agenda.prototype, {
     var key = this._key(params);
 
     this._db.get(key, function(err, value) {
-      var day;
       if (err && !err.notFound) return onComplete(err);
       if (err && err.notFound) value = {};
 
