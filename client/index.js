@@ -32,7 +32,7 @@ var App = Backbone.View.extend({
   },
 
   _setAgenda: function(month, day) {
-    self = this;
+    var self = this;
 
     if (this._agenda) {
       this.stopListening(this._agenda);
@@ -54,7 +54,7 @@ var App = Backbone.View.extend({
   },
 
   _setCalendar: function(month, day) {
-    self = this;
+    var self = this;
 
     if (this._calendar) {
       this.stopListening(this._calendar);
