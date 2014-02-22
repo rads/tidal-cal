@@ -9,7 +9,7 @@ Backbone.$ = $;
 
 var App = Backbone.View.extend({
   initialize: function() {
-    this._setMonth(new AgendaMonth({date: new Date()}))
+    this._setMonth(new AgendaMonth({date: new Date()}));
   },
 
   _setMonth: function(month) {
