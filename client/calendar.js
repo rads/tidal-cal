@@ -2,33 +2,37 @@ var $ = require('jquery'),
     Backbone = require('backbone'),
     _ = require('underscore');
 
-function daysInMonth(month, year) {
-  return new Date(year, (month + 1), 0).getDate();
-}
-
 var DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
     'Friday', 'Saturday'];
 
 var Calendar = Backbone.View.extend({
   template: _.template($('#calendar-day-template').html()),
 
-  initialize: function(options) {
-    this._addAllDays(options.date);
-    this._selectDay(options.date);
+  events: {
+    'click .calendar-day': '_clickDay'
   },
 
-  _addAllDays: function(date) {
-    var self = this;
-    var days = daysInMonth(date.getMonth(), date.getFullYear());
+  initialize: function(options) {
+    this._month = options.month;
+    this._day = options.day;
 
-    var startSpacers = date.getDay();
+    this._addAllDays();
+
+    var dayEl = this.$('[data-day-of-month=' + this._day.getDayOfMonth() + ']');
+    this._setSelectedDay(dayEl);
+  },
+
+  _addAllDays: function() {
+    var self = this;
+    var days = this._month.getDayCount();
+
+    var startSpacers = this._month.getDay(0).getDayOfWeek() + 1;
     _.times(startSpacers, function(i) {
       self._addDay(i);
     });
 
     _.times(days, function(i) {
-      var day = new Date(date.getFullYear(), date.getMonth(), i);
-      self._addDay((startSpacers + i), (i + 1), DAY_NAMES[day.getDay()]);
+      self._addDay((startSpacers + i), self._month.getDay(i + 1));
     });
 
     var endSpacers = (7 - ((startSpacers + days) % 7));
@@ -37,18 +41,33 @@ var Calendar = Backbone.View.extend({
     });
   },
 
-  _addDay: function(gridNumber, dayOfMonth, dayOfWeek) {
-    var day = this.template({
-      gridNumber: gridNumber,
-      dayOfMonth: dayOfMonth,
-      dayOfWeek: dayOfWeek
-    });
+  _addDay: function(gridNumber, day) {
+    var data = {gridNumber: gridNumber};
 
-    this.$el.append(day);
+    if (day) {
+      _.extend(data, {
+        dayOfMonth: day.getDayOfMonth(),
+        dayOfWeek: DAY_NAMES[day.getDayOfWeek()],
+        itemCount: day.get('items').length
+      });
+    }
+
+    this.$el.append(this.template(data));
   },
 
-  _selectDay: function(date) {
-    this.$('.calendar-day-' + date.getDate()).addClass('selected');
+  _setSelectedDay: function(dayEl) {
+    this.$('.selected').removeClass('selected');
+    dayEl.addClass('selected');
+  },
+
+  _clickDay: function(event) {
+    event.preventDefault();
+
+    var $target = $(event.currentTarget);
+    this._setSelectedDay($target);
+
+    var day = this._month.getDay($target.data('day-of-month'));
+    this.trigger('selectDay', day);
   }
 });
 

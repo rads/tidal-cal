@@ -7,22 +7,23 @@ var Agenda = Backbone.View.extend({
   template: _.template($('#agenda-item-template').html()),
 
   initialize: function(options) {
-    this._setDay(options.date);
+    var day = options.day;
+    this.$items = this.$('.agenda-items');
+    this.setDay(day);
   },
 
-  _setDay: function(date) {
+  setDay: function(day) {
     var self = this;
-    var agendaDay = new AgendaDay({date: date});
+    var items = day.get('items');
+    debugger;
 
-    agendaDay.once('sync', function() {
-      _.each(agendaDay.get('items'), function(body) {
-        var item = self.template({body: body});
-        self.$el.append(item);
-      });
+    this.$items.empty();
+
+    _.each(items, function(body) {
+      var item = self.template({body: body});
+      self.$items.append(item);
     });
-
-    agendaDay.fetch();
-  }
+  },
 });
 
 module.exports = Agenda;

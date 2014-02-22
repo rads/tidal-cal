@@ -3,23 +3,37 @@ var $ = require('jquery'),
     _ = require('underscore'),
     Calendar = require('./calendar'),
     Agenda = require('./agenda'),
-    AgendaDay = require('./agenda_day');
+    AgendaMonth = require('./agenda_month');
 
 Backbone.$ = $;
 
 var App = Backbone.View.extend({
   initialize: function() {
+    var self = this;
     var now = new Date();
+    var month = new AgendaMonth({date: now});
 
-    this._calendar = new Calendar({
-      el: this.$('.calendar'),
-      date: now
+    month.on('sync', function() {
+      var day = month.getDay(now.getDate());
+
+      self._calendar = new Calendar({
+        el: self.$('.calendar'),
+        month: month,
+        day: day
+      });
+
+      self._calendar.on('selectDay', function(day) {
+        self._agenda.setDay(day);
+      });
+
+      self._agenda = new Agenda({
+        el: self.$('.agenda'),
+        day: day
+      });
     });
 
-    this._agenda = new Agenda({
-      el: this.$('.agenda'),
-      date: now
-    });
+
+    month.fetch();
   }
 });
 

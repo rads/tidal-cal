@@ -13,6 +13,22 @@ var AgendaDay = Backbone.Model.extend({
     ];
 
     return 'agenda-day/' + parts.join('-');
+  },
+
+  getFullYear: function() {
+    return this.date.getFullYear();
+  },
+
+  getMonth: function() {
+    return this.date.getMonth();
+  },
+
+  getDayOfWeek: function() {
+    return this.date.getDay();
+  },
+
+  getDayOfMonth: function() {
+    return this.date.getDate();
   }
 });
 
